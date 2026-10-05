@@ -1659,8 +1659,8 @@ const I={
 /* ---------- speech ---------- */
 const synth=window.speechSynthesis;
 const hasTTS=!!synth&&typeof window.SpeechSynthesisUtterance!=="undefined";
-let voices=[];
-function loadVoices(){ if(!hasTTS)return; voices=synth.getVoices().filter(v=>/^en/i.test(v.lang)); if(state.tab==="me"&&!state.detail)render(); }
+let voices=[];let appReady=false;
+function loadVoices(){ if(!hasTTS)return; voices=synth.getVoices().filter(v=>/^en/i.test(v.lang)); if(appReady&&state.tab==="me"&&!state.detail)render(); }
 if(hasTTS){ loadVoices(); try{synth.addEventListener("voiceschanged",loadVoices)}catch(e){synth.onvoiceschanged=loadVoices} }
 function pickVoice(k){
   let v=voices.find(x=>x.name===settings[k]);
@@ -1917,6 +1917,7 @@ document.addEventListener("click",e=>{
 });
 document.addEventListener("change",e=>{const k=e.target.dataset.voice; if(k){settings[k]=e.target.value;saveSettings()}});
 
+appReady=true;
 render();
 })();
 </script>
